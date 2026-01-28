@@ -1,27 +1,22 @@
-import { getDb, saveDb } from '@/lib/local-db';
+import { query } from '@/lib/db';
 
 export async function POST(request: Request) {
     try {
         const { items, email, status = 'processing' } = await request.json();
-        const db = getDb();
 
-        // Create a new order log entry
-        const newOrder = {
-            id: `ORD-${Date.now().toString().slice(-6)}`,
-            email: email,
-            product: items.map((i: any) => i.name).join(', '),
-            amount: items.reduce((sum: number, i: any) => sum + (i.price * i.quantity), 0),
-            status: status, // e.g., 'processing', 'whop_redirect'
-            date: new Date().toLocaleString()
-        };
+        const id = `ORD-${Date.now().toString().slice(-6)}`;
+        const productName = items.map((i: any) => i.name).join(', ');
+        const amount = items.reduce((sum: number, i: any) => sum + (Number(i.price) * Number(i.quantity)), 0);
 
-        if (!db.orders) db.orders = [];
-        db.orders.unshift(newOrder); // Add to beginning
+        await query(
+            `INSERT INTO orders (id, email, product, amount, status, date)
+       VALUES ($1, $2, $3, $4, $5, NOW())`,
+            [id, email, productName, amount, status]
+        );
 
-        saveDb(db);
-
-        return Response.json({ success: true, orderId: newOrder.id });
+        return Response.json({ success: true, orderId: id });
     } catch (error) {
+        console.error('Order log error:', error);
         return Response.json({ error: 'Failed to log order' }, { status: 500 });
     }
 }

@@ -1,12 +1,14 @@
-import { getDb, saveDb } from '@/lib/local-db';
+import { query } from '@/lib/db';
 
 export async function GET() {
     try {
-        const db = getDb();
+        const result = await query('SELECT * FROM orders ORDER BY date DESC');
+        const orders = result.rows;
+
         return Response.json({
-            orders: db.orders || [],
-            totalRevenue: (db.orders || []).reduce((sum: number, o: any) => o.status === 'completed' ? sum + o.amount : sum, 0),
-            totalSales: (db.orders || []).filter((o: any) => o.status === 'completed').length
+            orders: orders,
+            totalRevenue: orders.reduce((sum: number, o: any) => o.status === 'completed' ? sum + Number(o.amount || 0) : sum, 0),
+            totalSales: orders.filter((o: any) => o.status === 'completed').length
         });
     } catch (error) {
         return Response.json({ error: 'Failed' }, { status: 500 });
@@ -16,9 +18,7 @@ export async function GET() {
 export async function DELETE(request: Request) {
     try {
         const { id } = await request.json();
-        const db = getDb();
-        db.orders = db.orders.filter((o: any) => o.id !== id);
-        saveDb(db);
+        await query('DELETE FROM orders WHERE id = $1', [id]);
         return Response.json({ success: true });
     } catch (error) {
         return Response.json({ error: 'Failed to delete' }, { status: 500 });
