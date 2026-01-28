@@ -1,5 +1,7 @@
 import Stripe from 'stripe';
 
+export const runtime = 'edge';
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_mock');
 
 export async function POST(request: Request) {

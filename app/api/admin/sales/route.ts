@@ -1,5 +1,7 @@
 import { query } from '@/lib/db';
 
+export const runtime = 'edge';
+
 export async function GET() {
     try {
         const result = await query('SELECT * FROM orders ORDER BY date DESC');

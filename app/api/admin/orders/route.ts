@@ -1,5 +1,7 @@
 import { query } from '@/lib/db';
 
+export const runtime = 'edge';
+
 export async function POST(request: Request) {
     try {
         const { items, email, status = 'processing' } = await request.json();

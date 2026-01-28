@@ -1,6 +1,8 @@
 import Stripe from 'stripe';
 import { Pool } from '@neondatabase/serverless';
 
+export const runtime = 'edge';
+
 const stripe = process.env.STRIPE_SECRET_KEY
   ? new Stripe(process.env.STRIPE_SECRET_KEY)
   : null;
