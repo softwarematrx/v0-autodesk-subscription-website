@@ -41,11 +41,7 @@ export default function ProductCard({
     const displayOriginalPrice = defaultTier ? defaultTier.originalPrice : originalPrice;
 
     const handleBuyNow = () => {
-        if (defaultTier?.checkoutUrl) {
-            window.location.href = defaultTier.checkoutUrl;
-        } else {
-            router.push(`/product/${id}`);
-        }
+        router.push(`/product/${id}`);
     };
 
     return (

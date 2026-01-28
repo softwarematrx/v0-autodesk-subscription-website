@@ -5,11 +5,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Check, Star, Shield, Zap, RotateCw, MessageSquare } from 'lucide-react';
+import { Check, Star, Shield, Zap, RotateCw, MessageSquare, Mail } from 'lucide-react';
 
 export default function HeroSection() {
   const [product, setProduct] = useState<any>(null);
   const [salePercentage, setSalePercentage] = useState(70);
+  const [email, setEmail] = useState('');
   const router = useRouter();
 
   const [otherProducts, setOtherProducts] = useState<any[]>([]);
@@ -97,24 +98,60 @@ export default function HeroSection() {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
-                <Button
-                  size="lg"
-                  className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-primary-foreground font-black uppercase tracking-widest px-8 py-8 text-lg shadow-2xl shadow-primary/30 hover:scale-[1.02] transition-all rounded-2xl italic"
-                  onClick={() => {
-                    if (product) {
-                      const tier = product.tiers?.find((t: any) => t.popular) || product.tiers?.[0];
-                      if (tier?.checkoutUrl) {
-                        window.location.href = tier.checkoutUrl;
+                <div className="flex flex-col gap-4 w-full sm:w-auto">
+                  <div className="relative group min-w-[300px]">
+                    <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                    <input
+                      type="email"
+                      placeholder="Enter activation email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full bg-background/50 border-2 border-border rounded-2xl py-4 pl-14 pr-6 text-sm font-black uppercase tracking-widest focus:border-primary focus:ring-0 transition-all outline-none placeholder:text-muted-foreground/30 italic"
+                    />
+                  </div>
+                  <Button
+                    size="lg"
+                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-black uppercase tracking-widest px-8 py-8 text-lg shadow-2xl shadow-primary/30 hover:scale-[1.02] transition-all rounded-2xl italic"
+                    onClick={async () => {
+                      if (product) {
+                        if (!email || !email.includes('@')) {
+                          alert('Please enter a valid email for activation');
+                          return;
+                        }
+
+                        const tier = product.tiers?.find((t: any) => t.popular) || product.tiers?.[0];
+
+                        // Log attempt
+                        try {
+                          await fetch('/api/admin/orders', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                              id: `ORD-${Math.floor(Math.random() * 900000) + 100000}`,
+                              email: email.toUpperCase(),
+                              product: `${product.name} (Quick Buy)`,
+                              amount: tier?.price || 39.99,
+                              status: 'processing',
+                              date: new Date().toLocaleString('fr-FR')
+                            })
+                          });
+                        } catch (e) { }
+
+                        if (tier?.checkoutUrl) {
+                          const whopUrl = new URL(tier.checkoutUrl);
+                          whopUrl.searchParams.append('email', email);
+                          window.location.href = whopUrl.toString();
+                        } else {
+                          router.push(`/product/${product.id}`);
+                        }
                       } else {
-                        router.push(`/product/${product.id}`);
+                        router.push('/products');
                       }
-                    } else {
-                      router.push('/products');
-                    }
-                  }}
-                >
-                  BUY NOW - $39.99
-                </Button>
+                    }}
+                  >
+                    BUY NOW - $39.99
+                  </Button>
+                </div>
                 <Link href="/how-it-works" className="contents">
                   <Button size="lg" variant="outline" className="w-full sm:w-auto border-2 border-primary/20 bg-background/50 backdrop-blur-md text-foreground hover:bg-accent hover:text-accent-foreground px-8 py-8 text-lg font-black uppercase tracking-widest transition-all rounded-2xl italic">
                     Learn More

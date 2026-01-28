@@ -4,11 +4,12 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Shield, Star, MessageSquare } from 'lucide-react';
+import { ArrowRight, Shield, Star, MessageSquare, Mail } from 'lucide-react';
 
 export default function CTASection() {
   const [basePrice, setBasePrice] = useState('49.99');
   const [product, setProduct] = useState<any>(null);
+  const [email, setEmail] = useState('');
   const router = useRouter();
 
   useEffect(() => {
@@ -65,31 +66,67 @@ export default function CTASection() {
           full support, and 30-day money back guarantee.
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-          <Button
-            size="lg"
-            className="w-full sm:w-auto bg-white text-primary hover:bg-gray-100 px-10 py-7 text-xl font-bold shadow-2xl transition-all duration-300 hover:scale-[1.02] group border-none italic"
-            onClick={() => {
-              if (product) {
-                const tier = product.tiers?.find((t: any) => t.popular) || product.tiers?.[0];
-                if (tier?.checkoutUrl) {
-                  window.location.href = tier.checkoutUrl;
+        <div className="flex flex-col items-center gap-6 mb-8 max-w-md mx-auto">
+          <div className="relative group w-full">
+            <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-white/60 group-focus-within:text-white transition-colors" />
+            <input
+              type="email"
+              placeholder="ENTER ACTIVATION EMAIL"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full bg-white/10 border-2 border-white/20 rounded-2xl py-5 pl-14 pr-6 text-sm font-black uppercase tracking-widest focus:border-white focus:ring-0 transition-all outline-none placeholder:text-white/40 italic text-white"
+            />
+          </div>
+          <div className="flex flex-col sm:flex-row gap-4 w-full justify-center">
+            <Button
+              size="lg"
+              className="w-full sm:w-auto bg-white text-primary hover:bg-gray-100 px-10 py-7 text-xl font-bold shadow-2xl transition-all duration-300 hover:scale-[1.02] group border-none italic"
+              onClick={async () => {
+                if (product) {
+                  if (!email || !email.includes('@')) {
+                    alert('Please enter a valid email for activation');
+                    return;
+                  }
+
+                  const tier = product.tiers?.find((t: any) => t.popular) || product.tiers?.[0];
+
+                  // Log attempt
+                  try {
+                    await fetch('/api/admin/orders', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                        id: `ORD-${Math.floor(Math.random() * 900000) + 100000}`,
+                        email: email.toUpperCase(),
+                        product: `${product.name} (CTA Quick Buy)`,
+                        amount: tier?.price || 39.99,
+                        status: 'processing',
+                        date: new Date().toLocaleString('fr-FR')
+                      })
+                    });
+                  } catch (e) { }
+
+                  if (tier?.checkoutUrl) {
+                    const whopUrl = new URL(tier.checkoutUrl);
+                    whopUrl.searchParams.append('email', email);
+                    window.location.href = whopUrl.toString();
+                  } else {
+                    router.push(`/product/${product.id}`);
+                  }
                 } else {
-                  router.push(`/product/${product.id}`);
+                  router.push('/products');
                 }
-              } else {
-                router.push('/products');
-              }
-            }}
-          >
-            BUY NOW - ${basePrice}
-            <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </Button>
-          <Button size="lg" variant="outline" className="w-full sm:w-auto border-2 border-white/40 text-white hover:bg-white/20 hover:border-white px-10 py-7 text-xl bg-transparent transition-all duration-300" asChild>
-            <Link href="/how-it-works">
-              Learn More
-            </Link>
-          </Button>
+              }}
+            >
+              BUY NOW - ${basePrice}
+              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </Button>
+            <Button size="lg" variant="outline" className="w-full sm:w-auto border-2 border-white/40 text-white hover:bg-white/20 hover:border-white px-10 py-7 text-xl bg-transparent transition-all duration-300" asChild>
+              <Link href="/how-it-works">
+                Learn More
+              </Link>
+            </Button>
+          </div>
         </div>
 
         <p className="text-sm font-black uppercase tracking-widest italic opacity-80 flex items-center justify-center gap-6">

@@ -30,6 +30,7 @@ export default function ProductDetailPage() {
   const [product, setProduct] = useState<any>(null);
   const [otherProducts, setOtherProducts] = useState<any[]>([]);
   const [selectedTier, setSelectedTier] = useState<any>(null);
+  const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -57,8 +58,33 @@ export default function ProductDetailPage() {
 
   const handleBuyNow = async () => {
     if (product && selectedTier) {
+      if (!email || !email.includes('@')) {
+        alert('Please enter a valid email for activation');
+        return;
+      }
+
+      // Log order attempt locally for administration
+      try {
+        await fetch('/api/admin/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: `ORD-${Math.floor(Math.random() * 900000) + 100000}`,
+            email: email.toUpperCase(),
+            product: `${product.name} (${selectedTier.duration})`,
+            amount: selectedTier.price,
+            status: 'processing',
+            date: new Date().toLocaleString('fr-FR')
+          })
+        });
+      } catch (e) {
+        console.error('Failed to log order:', e);
+      }
+
       if (selectedTier.checkoutUrl) {
-        window.location.href = selectedTier.checkoutUrl;
+        const whopUrl = new URL(selectedTier.checkoutUrl);
+        whopUrl.searchParams.append('email', email);
+        window.location.href = whopUrl.toString();
       } else {
         // Fallback to internal checkout API for a single item if no Whop link exists
         try {
@@ -73,7 +99,7 @@ export default function ProductDetailPage() {
                 image: product.image,
                 quantity: 1
               }],
-              email: '' // Stripe will ask for email on their page
+              email: email
             }),
           });
           const data = await response.json();
@@ -241,10 +267,27 @@ export default function ProductDetailPage() {
                     ${selectedTier?.originalPrice.toFixed(2)}
                   </span>
                 </div>
-                <p className="text-[#00b67a] font-black uppercase text-[10px] tracking-[0.3em] mb-8 flex items-center gap-2">
+                <p className="text-[#00b67a] font-black uppercase text-[10px] tracking-[0.3em] mb-6 flex items-center gap-2">
                   <Check className="w-4 h-4" />
                   Direct Account Activation Enabled
                 </p>
+
+                {/* Email Field Integration */}
+                <div className="mb-6 space-y-3">
+                  <label className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.3em] italic px-1">Activation Email:</label>
+                  <div className="relative group">
+                    <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                    <input
+                      type="email"
+                      placeholder="ENTER YOUR AUTODESK EMAIL"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full bg-background/50 border-2 border-border rounded-2xl py-5 pl-14 pr-6 text-sm font-black uppercase tracking-widest focus:border-primary focus:ring-0 transition-all outline-none placeholder:text-muted-foreground/30 italic"
+                      required
+                    />
+                  </div>
+                  <p className="text-[9px] text-muted-foreground/50 font-bold uppercase tracking-widest px-1 italic">We will link the subscription to this account within 5min.</p>
+                </div>
 
                 <Button
                   onClick={handleBuyNow}
