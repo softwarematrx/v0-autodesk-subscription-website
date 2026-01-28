@@ -92,6 +92,10 @@ export default function ProductCard({
                 <div className="mb-6 flex justify-between items-start">
                     <Link href={`/product/${id}`} className="hover:opacity-80 transition-opacity">
                         <h3 className="text-2xl font-black text-foreground mb-2 uppercase italic tracking-tighter leading-none">{name}</h3>
+                        <div className="flex gap-2 mb-3">
+                            <span className="text-[8px] font-black bg-muted px-2 py-0.5 rounded text-muted-foreground uppercase tracking-widest border border-border">Windows</span>
+                            <span className="text-[8px] font-black bg-muted px-2 py-0.5 rounded text-muted-foreground uppercase tracking-widest border border-border">Mac OS</span>
+                        </div>
                         <p className="text-muted-foreground text-xs font-bold uppercase tracking-widest leading-none">{description}</p>
                     </Link>
                     <div className="flex flex-col items-end">

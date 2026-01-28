@@ -18,6 +18,20 @@ export default function Footer() {
             <p className="text-muted-foreground text-xs font-medium leading-relaxed uppercase tracking-tight">
               Leading authorized reseller of genuine AutoCAD 2026 licenses. Delivering high-performance design software instantly across the globe.
             </p>
+            <div className="flex gap-4 items-center">
+              <div className="flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition-opacity">
+                <div className="w-8 h-8 bg-muted rounded flex items-center justify-center border border-border">
+                  <span className="text-[10px] font-black">WIN</span>
+                </div>
+                <span className="text-[7px] font-black uppercase tracking-widest">Windows</span>
+              </div>
+              <div className="flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition-opacity">
+                <div className="w-8 h-8 bg-muted rounded flex items-center justify-center border border-border">
+                  <span className="text-[10px] font-black">MAC</span>
+                </div>
+                <span className="text-[7px] font-black uppercase tracking-widest">MacOS</span>
+              </div>
+            </div>
             <div className="flex items-center gap-2 bg-muted w-fit px-4 py-2 rounded-xl border border-border">
               <Star className="w-4 h-4 fill-[#00b67a] text-[#00b67a]" />
               <span className="text-[10px] font-black text-foreground uppercase tracking-widest">4.9/5 TrustScore</span>

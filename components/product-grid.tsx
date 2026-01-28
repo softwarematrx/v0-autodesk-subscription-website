@@ -88,7 +88,11 @@ export default function ProductGrid() {
                 <CardHeader>
                   <div className="text-4xl mb-4">{product.icon}</div>
                   <CardTitle>{product.name}</CardTitle>
-                  <CardDescription>{product.description}</CardDescription>
+                  <div className="flex gap-2 mt-2">
+                    <span className="text-[7px] font-black bg-muted px-1.5 py-0.5 rounded text-muted-foreground uppercase border border-border">Windows</span>
+                    <span className="text-[7px] font-black bg-muted px-1.5 py-0.5 rounded text-muted-foreground uppercase border border-border">Mac OS</span>
+                  </div>
+                  <CardDescription className="mt-2">{product.description}</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Button className="w-full">View Plans</Button>

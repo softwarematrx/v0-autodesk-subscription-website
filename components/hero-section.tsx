@@ -84,8 +84,8 @@ export default function HeroSection() {
               {/* Features */}
               <div className="grid grid-cols-2 gap-4 mb-8">
                 {[
-                  { label: 'Cloud Access', icon: MessageSquare },
-                  { label: 'Instant Connect', icon: Zap },
+                  { label: 'Windows & Mac', icon: Zap },
+                  { label: 'Instant Connect', icon: RotateCw },
                   { label: '100% Genuine', icon: Shield },
                   { label: 'Official Support', icon: Check }
                 ].map((f, i) => (

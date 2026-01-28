@@ -172,6 +172,16 @@ export default function ProductDetailPage() {
                 <h1 className="text-4xl md:text-5xl lg:text-7xl font-black text-foreground mb-4 uppercase italic tracking-tighter leading-[0.9]">
                   {product.name}
                 </h1>
+                <div className="flex gap-3 mb-8">
+                  <div className="flex items-center gap-2 bg-muted border border-border px-3 py-1.5 rounded-xl">
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] italic">Windows Compatible</span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-muted border border-border px-3 py-1.5 rounded-xl">
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] italic">Mac OS Compatible</span>
+                  </div>
+                </div>
                 <p className="text-2xl text-primary font-black mb-8 italic uppercase tracking-tight">{product.description}</p>
                 <p className="text-muted-foreground text-lg leading-relaxed mb-10 font-medium">
                   {product.fullDescription || `Experience the full potential of ${product.name} with direct account activation. Our process is 100% official, linking the subscription directly to your Autodesk ID for a seamless experience.`}
