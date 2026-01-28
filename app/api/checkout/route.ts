@@ -1,31 +1,41 @@
-import Stripe from 'stripe';
+import { stripe } from '@/lib/stripe';
 
 export const runtime = 'edge';
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_mock');
 
 export async function POST(request: Request) {
   try {
     const { items, email } = await request.json();
 
-    const host = request.headers.get('host');
-    const protocol = host?.includes('localhost') ? 'http' : 'https';
-    const origin = `${protocol}://${host}`;
+    const origin = new URL(request.url).origin;
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || origin;
 
-    const lineItems = items.map((item: any) => ({
-      price_data: {
-        currency: 'usd',
-        product_data: {
-          name: item.name || 'AutoCAD Subscription',
-          images: item.image ? [new URL(item.image, baseUrl).toString()] : [],
-        },
-        unit_amount: Math.round((item.price || 0) * 100),
-      },
-      quantity: item.quantity || 1,
-    }));
+    const lineItems = items.map((item: any) => {
+      let imageUrl = '';
+      if (item.image) {
+        try {
+          // If item.image is already absolute, use it. Otherwise, join with baseUrl.
+          imageUrl = item.image.startsWith('http')
+            ? item.image
+            : new URL(item.image, baseUrl).toString();
+        } catch (e) {
+          console.error('Invalid image URL:', item.image);
+        }
+      }
 
-    if (!process.env.STRIPE_SECRET_KEY || process.env.STRIPE_SECRET_KEY === 'sk_test_mock') {
+      return {
+        price_data: {
+          currency: 'usd',
+          product_data: {
+            name: item.name || 'AutoCAD Subscription',
+            images: imageUrl ? [imageUrl] : [],
+          },
+          unit_amount: Math.round((Number(item.price) || 0) * 100),
+        },
+        quantity: Math.max(1, Number(item.quantity) || 1),
+      };
+    });
+
+    if (!stripe || !process.env.STRIPE_SECRET_KEY || process.env.STRIPE_SECRET_KEY === 'sk_test_mock') {
       return Response.json({
         sessionId: 'mock_session',
         url: `${baseUrl}/success`

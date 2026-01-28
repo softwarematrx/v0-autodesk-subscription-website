@@ -45,14 +45,18 @@ export default function CartPage() {
 
     // 2. Redirect to Whop or internal Stripe
     const externalUrl = items[0]?.checkoutUrl;
-    if (externalUrl) {
-      // Append email as query param if Whop supports it (optional)
-      const whopUrl = new URL(externalUrl);
-      whopUrl.searchParams.append('email', email);
-      window.location.href = whopUrl.toString();
-      return;
+    if (externalUrl && externalUrl.startsWith('http')) {
+      try {
+        const whopUrl = new URL(externalUrl);
+        whopUrl.searchParams.append('email', email);
+        window.location.href = whopUrl.toString();
+        return;
+      } catch (e) {
+        console.error('Invalid checkout URL:', externalUrl);
+      }
     }
 
+    // Default to internal Checkout API
     try {
       const response = await fetch('/api/checkout', {
         method: 'POST',
@@ -60,15 +64,20 @@ export default function CartPage() {
         body: JSON.stringify({ items, email }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error('Checkout failed');
+        throw new Error(data.error || 'Checkout failed');
       }
 
-      const data = await response.json();
-      window.location.href = data.url;
-    } catch (error) {
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error('No checkout URL received');
+      }
+    } catch (error: any) {
       console.error('Checkout error:', error);
-      alert('Failed to proceed to checkout');
+      alert(`Checkout failed: ${error.message}. Please try again or contact support.`);
     } finally {
       setLoading(false);
     }
