@@ -12,8 +12,8 @@ import { ThemeProvider } from '@/components/theme-provider';
 
 export const metadata: Metadata = {
   title: 'AutoCAD Store | Official Genuine Software Licenses',
-  description: 'Buy genuine AutoCAD 2026 licenses for Windows PC. Instant email delivery, lifetime support, and best prices guaranteed.',
-  keywords: 'AutoCAD 2026, Autodesk subscription, CAD software, low cost AutoCAD, AutoCAD for Windows, genuine AutoCAD license',
+  description: 'Buy genuine AutoCAD 2026 licenses for Windows & Mac. Instant email delivery, lifetime support, and best prices guaranteed.',
+  keywords: 'AutoCAD 2026, Autodesk subscription, CAD software, AutoCAD for Mac, AutoCAD for Windows, genuine AutoCAD license',
   icons: {
     icon: '/images/autocad-icon.png',
   },

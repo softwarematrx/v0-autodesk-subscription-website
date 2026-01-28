@@ -120,7 +120,7 @@ export default function CartPage() {
                             <h3 className="font-black text-2xl text-foreground uppercase italic tracking-tight mb-2 leading-none">{item.name}</h3>
                             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 mb-4">
                               <span className="text-[10px] text-muted-foreground font-black uppercase tracking-widest bg-muted px-3 py-1.5 rounded-full italic border border-border">1-Year Subscription</span>
-                              <span className="text-[10px] text-muted-foreground font-black uppercase tracking-widest bg-muted px-3 py-1.5 rounded-full italic border border-border">Windows PC</span>
+                              <span className="text-[10px] text-muted-foreground font-black uppercase tracking-widest bg-muted px-3 py-1.5 rounded-full italic border border-border">Windows & Mac</span>
                             </div>
                             <p className="font-black text-primary text-2xl italic tracking-tight">${item.price.toFixed(2)}</p>
                           </div>
