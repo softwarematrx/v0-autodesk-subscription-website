@@ -12,4 +12,4 @@ compatibility_flags = ["nodejs_compat"]
 [[d1_databases]]
 binding = "DB"
 database_name = "v0-autodesk-db"
-database_id = "REPLACEME_WITH_D1_ID"
+database_id = "8a6a14a7-50e6-431e-b6fc-4c4bd04f5255"

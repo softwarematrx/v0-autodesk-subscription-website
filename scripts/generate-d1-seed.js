@@ -8,7 +8,10 @@ let sql = '-- Migration data for Cloudflare D1\n';
 
 console.log('Generating Products SQL...');
 for (const p of db.products) {
-    sql += `INSERT INTO products (id, name, description, full_description, image, status, tiers, features, price, original_price) VALUES ('${p.id}', '${p.name.replace(/'/g, "''")}', '${(p.description || '').replace(/'/g, "''")}', '${(p.fullDescription || '').replace(/'/g, "''")}', '${p.image}', '${p.status}', '${JSON.stringify(p.tiers).replace(/'/g, "''")}', '${JSON.stringify(p.features).replace(/'/g, "''")}', ${p.price}, ${p.originalPrice});\n`;
+    const price = typeof p.price === 'number' ? p.price : 0;
+    const originalPrice = typeof p.originalPrice === 'number' ? p.originalPrice : 0;
+
+    sql += `INSERT INTO products (id, name, description, full_description, image, status, tiers, features, price, original_price) VALUES ('${p.id}', '${p.name.replace(/'/g, "''")}', '${(p.description || '').replace(/'/g, "''")}', '${(p.fullDescription || '').replace(/'/g, "''")}', '${p.image}', '${p.status}', '${JSON.stringify(p.tiers).replace(/'/g, "''")}', '${JSON.stringify(p.features).replace(/'/g, "''")}', ${price}, ${originalPrice});\n`;
 }
 
 console.log('Generating Settings SQL...');
