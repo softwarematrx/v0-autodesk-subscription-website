@@ -7,7 +7,6 @@ import { useParams, useRouter } from 'next/navigation';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { Button } from '@/components/ui/button';
-import { useCart } from '@/lib/cart-context';
 import {
   Check,
   Shield,
@@ -28,12 +27,10 @@ import Link from 'next/link';
 export default function ProductDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const { addItem } = useCart();
   const [product, setProduct] = useState<any>(null);
   const [otherProducts, setOtherProducts] = useState<any[]>([]);
   const [selectedTier, setSelectedTier] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [added, setAdded] = useState(false);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -58,18 +55,36 @@ export default function ProductDetailPage() {
     fetchProduct();
   }, [params.id]);
 
-  const handleAddToCart = () => {
+  const handleBuyNow = async () => {
     if (product && selectedTier) {
-      addItem({
-        id: `${product.id}-${selectedTier.id}`,
-        name: `${product.name} (${selectedTier.duration})`,
-        price: selectedTier.price,
-        image: product.image,
-        checkoutUrl: selectedTier.checkoutUrl
-      });
-      setAdded(true);
-      // Direct swipe to cart
-      router.push('/cart');
+      if (selectedTier.checkoutUrl) {
+        window.location.href = selectedTier.checkoutUrl;
+      } else {
+        // Fallback to internal checkout API for a single item if no Whop link exists
+        try {
+          const response = await fetch('/api/checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              items: [{
+                id: `${product.id}-${selectedTier.id}`,
+                name: `${product.name} (${selectedTier.duration})`,
+                price: selectedTier.price,
+                image: product.image,
+                quantity: 1
+              }],
+              email: '' // Stripe will ask for email on their page
+            }),
+          });
+          const data = await response.json();
+          if (data.url) {
+            window.location.href = data.url;
+          }
+        } catch (e) {
+          console.error('Checkout error:', e);
+          alert('Failed to start checkout');
+        }
+      }
     }
   };
 
@@ -232,11 +247,10 @@ export default function ProductDetailPage() {
                 </p>
 
                 <Button
-                  onClick={handleAddToCart}
-                  className={`w-full py-12 text-2xl font-black uppercase tracking-[0.2em] transition-all duration-500 shadow-2xl hover:scale-[1.02] active:scale-95 italic ${added ? 'bg-[#00b67a] hover:bg-[#00b67a] text-white' : 'bg-primary hover:bg-primary/90 text-primary-foreground shadow-primary/20'
-                    }`}
+                  onClick={handleBuyNow}
+                  className="w-full py-12 text-2xl font-black uppercase tracking-[0.2em] transition-all duration-500 shadow-2xl hover:scale-[1.02] active:scale-95 italic bg-primary hover:bg-primary/90 text-primary-foreground shadow-primary/20"
                 >
-                  {added ? 'Added ✓' : 'BUY NOW'}
+                  BUY NOW
                 </Button>
 
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-8 pt-8 border-t border-border">

@@ -1,7 +1,6 @@
 import React from "react"
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import { CartProvider } from '@/lib/cart-context'
 import { AdminProvider } from '@/lib/admin-context'
 import './globals.css'
 
@@ -35,10 +34,8 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AdminProvider>
-            <CartProvider>
-              {children}
-              <FloatingContact />
-            </CartProvider>
+            {children}
+            <FloatingContact />
           </AdminProvider>
         </ThemeProvider>
       </body>

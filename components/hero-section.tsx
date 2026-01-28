@@ -5,13 +5,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { useCart } from '@/lib/cart-context';
 import { Check, Star, Shield, Zap, RotateCw, MessageSquare } from 'lucide-react';
 
 export default function HeroSection() {
   const [product, setProduct] = useState<any>(null);
   const [salePercentage, setSalePercentage] = useState(70);
-  const { addItem } = useCart();
   const router = useRouter();
 
   const [otherProducts, setOtherProducts] = useState<any[]>([]);
@@ -105,14 +103,11 @@ export default function HeroSection() {
                   onClick={() => {
                     if (product) {
                       const tier = product.tiers?.find((t: any) => t.popular) || product.tiers?.[0];
-                      addItem({
-                        id: tier ? `${product.id}-${tier.id}` : product.id,
-                        name: tier ? `${product.name} (${tier.duration})` : product.name,
-                        price: tier ? tier.price : product.price,
-                        image: product.image,
-                        checkoutUrl: tier?.checkoutUrl
-                      });
-                      router.push('/cart');
+                      if (tier?.checkoutUrl) {
+                        window.location.href = tier.checkoutUrl;
+                      } else {
+                        router.push(`/product/${product.id}`);
+                      }
                     } else {
                       router.push('/products');
                     }

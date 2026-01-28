@@ -3,8 +3,7 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { ShoppingCart, Menu, X, ChevronDown } from 'lucide-react';
-import { useCart } from '@/lib/cart-context';
+import { Menu, X, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const NAV_LINKS = [
@@ -25,9 +24,7 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [showLegal, setShowLegal] = useState(false);
   const [product, setProduct] = useState<any>(null);
-  const { items, addItem } = useCart();
   const router = useRouter();
-  const cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -46,14 +43,11 @@ export default function Header() {
   const handleQuickBuy = () => {
     if (product) {
       const tier = product.tiers?.find((t: any) => t.popular) || product.tiers?.[0];
-      addItem({
-        id: tier ? `${product.id}-${tier.id}` : product.id,
-        name: tier ? `${product.name} (${tier.duration})` : product.name,
-        price: tier ? tier.price : product.price,
-        image: product.image,
-        checkoutUrl: tier?.checkoutUrl
-      });
-      router.push('/cart');
+      if (tier?.checkoutUrl) {
+        window.location.href = tier.checkoutUrl;
+      } else {
+        router.push(`/product/${product.id}`);
+      }
     } else {
       router.push('/products');
     }
@@ -110,18 +104,8 @@ export default function Header() {
             </div>
           </nav>
 
-          {/* Cart, Theme & Mobile Menu */}
+          {/* Theme & Mobile Menu */}
           <div className="flex items-center gap-2 sm:gap-4">
-
-            <Link href="/cart" className="relative p-2 bg-secondary rounded-full hover:bg-secondary/80 transition-colors">
-              <ShoppingCart className="w-5 h-5 text-foreground" />
-              {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-background">
-                  {cartCount}
-                </span>
-              )}
-            </Link>
-
             <div className="hidden sm:flex items-center gap-3">
               <div className="flex flex-col items-end">
                 <span className="text-[8px] font-black text-primary uppercase tracking-[0.2em] animate-pulse leading-none mb-1">Flash Sale</span>

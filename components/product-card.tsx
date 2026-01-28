@@ -4,7 +4,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { useCart } from '@/lib/cart-context';
 import { Check, Star, Shield, Zap } from 'lucide-react';
 import { useState } from 'react';
 
@@ -33,7 +32,6 @@ export default function ProductCard({
     popular,
     tiers
 }: ProductCardProps) {
-    const { addItem } = useCart();
     const router = useRouter();
     const [added, setAdded] = useState(false);
 
@@ -42,21 +40,12 @@ export default function ProductCard({
     const displayPrice = defaultTier ? defaultTier.price : (price || 0);
     const displayOriginalPrice = defaultTier ? defaultTier.originalPrice : originalPrice;
 
-    const handleAddToCart = () => {
-        if (defaultTier) {
-            addItem({
-                id: `${id}-${defaultTier.id}`,
-                name: `${name} (${defaultTier.duration})`,
-                price: defaultTier.price,
-                image,
-                checkoutUrl: defaultTier.checkoutUrl
-            });
+    const handleBuyNow = () => {
+        if (defaultTier?.checkoutUrl) {
+            window.location.href = defaultTier.checkoutUrl;
         } else {
-            addItem({ id, name, price: price || 0, image });
+            router.push(`/product/${id}`);
         }
-        setAdded(true);
-        // Direct swipe to cart
-        router.push('/cart');
     };
 
     return (
@@ -134,11 +123,10 @@ export default function ProductCard({
                 {/* Actions */}
                 <div className="grid grid-cols-1 gap-4 pt-8 border-t border-border">
                     <Button
-                        onClick={handleAddToCart}
-                        className={`w-full py-10 text-xl font-black transition-all duration-500 uppercase tracking-[0.2em] italic rounded-2xl shadow-xl ${added ? 'bg-[#00b67a] hover:bg-[#00b67a] text-white' : 'bg-primary hover:bg-primary/90 text-primary-foreground shadow-primary/20'
-                            }`}
+                        onClick={handleBuyNow}
+                        className="w-full py-10 text-xl font-black transition-all duration-500 uppercase tracking-[0.2em] italic rounded-2xl shadow-xl bg-primary hover:bg-primary/90 text-primary-foreground shadow-primary/20"
                     >
-                        {added ? '✓ Added' : 'BUY NOW'}
+                        BUY NOW
                     </Button>
                     <Button variant="ghost" className="w-full text-muted-foreground hover:text-foreground border border-border hover:bg-muted h-14 uppercase tracking-[0.3em] text-[10px] font-black italic rounded-2xl transition-all" asChild>
                         <Link href={`/product/${id}`}>

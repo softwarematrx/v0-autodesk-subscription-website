@@ -4,13 +4,11 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { useCart } from '@/lib/cart-context';
 import { ArrowRight, Shield, Star, MessageSquare } from 'lucide-react';
 
 export default function CTASection() {
   const [basePrice, setBasePrice] = useState('49.99');
   const [product, setProduct] = useState<any>(null);
-  const { addItem } = useCart();
   const router = useRouter();
 
   useEffect(() => {
@@ -74,20 +72,17 @@ export default function CTASection() {
             onClick={() => {
               if (product) {
                 const tier = product.tiers?.find((t: any) => t.popular) || product.tiers?.[0];
-                addItem({
-                  id: tier ? `${product.id}-${tier.id}` : product.id,
-                  name: tier ? `${product.name} (${tier.duration})` : product.name,
-                  price: tier ? tier.price : product.price,
-                  image: product.image,
-                  checkoutUrl: tier?.checkoutUrl
-                });
-                router.push('/cart');
+                if (tier?.checkoutUrl) {
+                  window.location.href = tier.checkoutUrl;
+                } else {
+                  router.push(`/product/${product.id}`);
+                }
               } else {
                 router.push('/products');
               }
             }}
           >
-            BUY NOW - $39.99
+            BUY NOW - ${basePrice}
             <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </Button>
           <Button size="lg" variant="outline" className="w-full sm:w-auto border-2 border-white/40 text-white hover:bg-white/20 hover:border-white px-10 py-7 text-xl bg-transparent transition-all duration-300" asChild>

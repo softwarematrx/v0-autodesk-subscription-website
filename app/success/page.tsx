@@ -6,18 +6,12 @@ import Link from 'next/link';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { Button } from '@/components/ui/button';
-import { useCart } from '@/lib/cart-context';
 import { CheckCircle, Mail, Download, Shield, ArrowRight, Share2, RotateCw } from 'lucide-react';
 
 function SuccessPageContent() {
   const searchParams = useSearchParams();
   const sessionId = searchParams.get('session_id');
-  const { clearCart } = useCart();
   const [orderNumber] = useState(`AS-${Math.floor(Math.random() * 90000) + 10000}`);
-
-  useEffect(() => {
-    clearCart();
-  }, [clearCart]);
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -113,14 +107,15 @@ function SuccessPageContent() {
             </Button>
           </div>
 
-          <div className="bg-primary/5 border border-primary/20 rounded-[2.5rem] p-10 flex flex-col md:flex-row items-center justify-between gap-8 text-left shadow-xl">
-            <div>
-              <h3 className="text-2xl font-black text-foreground mb-3 italic uppercase tracking-tighter leading-none">Need immediate assistance?</h3>
-              <p className="text-muted-foreground font-medium max-w-md">Our licensing experts are standing by. If you haven't received your key within 5 minutes, please reach out directly.</p>
+          <div className="bg-gradient-to-br from-primary/10 via-background to-primary/5 border border-primary/20 rounded-[3rem] p-10 md:p-14 flex flex-col md:flex-row items-center justify-between gap-10 text-left shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+            <div className="relative z-10">
+              <h3 className="text-3xl font-black text-foreground mb-4 italic uppercase tracking-tighter leading-none">Need immediate assistance?</h3>
+              <p className="text-muted-foreground font-medium max-w-lg text-lg leading-relaxed">Our licensing experts are standing by. If you haven't received your key within 5 minutes, please reach out directly.</p>
             </div>
-            <Button size="lg" className="bg-foreground text-background hover:opacity-90 font-black px-10 h-16 uppercase tracking-[0.2em] text-xs italic rounded-2xl shadow-xl w-full" asChild>
+            <Button size="lg" className="bg-foreground text-background hover:scale-105 transition-all font-black px-12 h-20 uppercase tracking-[0.2em] text-sm italic rounded-[1.5rem] shadow-2xl w-full md:w-auto shrink-0 relative z-10" asChild>
               <Link href="/contact">
-                Message me now
+                MESSAGE ME NOW
               </Link>
             </Button>
           </div>
