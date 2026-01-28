@@ -1,12 +1,20 @@
 import { Pool } from '@neondatabase/serverless';
 
-export const pool = process.env.DATABASE_URL
-  ? new Pool({ connectionString: process.env.DATABASE_URL })
+// Super-safe initialization for Cloudflare build phase
+const dbUrl = process.env.DATABASE_URL;
+const isDbConfigured = typeof dbUrl === 'string' && dbUrl.startsWith('postgres');
+
+export const pool = isDbConfigured
+  ? new Pool({ connectionString: dbUrl })
   : null;
 
 export async function query(text: string, params?: unknown[]) {
+  if (!pool) {
+    console.error('Database connection failed: DATABASE_URL is missing or invalid.');
+    throw new Error('Database not configured');
+  }
+
   const start = Date.now();
-  if (!pool) throw new Error('Database pool is not initialized');
   try {
     const result = await pool.query(text, params);
     const duration = Date.now() - start;
@@ -19,6 +27,6 @@ export async function query(text: string, params?: unknown[]) {
 }
 
 export async function getConnection() {
-  if (!pool) throw new Error('Database pool is not initialized');
+  if (!pool) throw new Error('Database not configured');
   return await pool.connect();
 }
