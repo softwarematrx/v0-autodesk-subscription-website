@@ -9,7 +9,7 @@ export async function POST(request: Request) {
         const id = `msg-${Date.now()}`;
         await query(
             `INSERT INTO messages (id, name, email, subject, message, status, date)
-             VALUES ($1, $2, $3, $4, $5, 'unread', NOW())`,
+             VALUES (?, ?, ?, ?, ?, 'unread', CURRENT_TIMESTAMP)`,
             [id, body.name, body.email, body.subject, body.message]
         );
 
@@ -32,7 +32,7 @@ export async function GET() {
 export async function DELETE(request: Request) {
     try {
         const { id } = await request.json();
-        await query('DELETE FROM messages WHERE id = $1', [id]);
+        await query('DELETE FROM messages WHERE id = ?', [id]);
         return Response.json({ success: true });
     } catch (error) {
         return Response.json({ error: 'Failed' }, { status: 500 });

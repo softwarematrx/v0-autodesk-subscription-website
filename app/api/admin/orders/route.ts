@@ -12,7 +12,7 @@ export async function POST(request: Request) {
 
         await query(
             `INSERT INTO orders (id, email, product, amount, status, date)
-       VALUES ($1, $2, $3, $4, $5, NOW())`,
+       VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)`,
             [id, email, productName, amount, status]
         );
 

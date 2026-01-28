@@ -1,41 +1,45 @@
--- Migration script for Cloudflare/Postgres
-CREATE TABLE IF NOT EXISTS products (
-  id VARCHAR(255) PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
+-- Migration script for Cloudflare D1 (SQLite)
+DROP TABLE IF EXISTS products;
+CREATE TABLE products (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
   description TEXT,
   full_description TEXT,
-  image VARCHAR(255),
-  status VARCHAR(50) DEFAULT 'active',
-  tiers JSONB,
-  features JSONB,
-  price DECIMAL(10, 2),
-  original_price DECIMAL(10, 2),
-  is_active BOOLEAN DEFAULT true,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  image TEXT,
+  status TEXT DEFAULT 'active',
+  tiers TEXT, -- JSON string
+  features TEXT, -- JSON string
+  price REAL,
+  original_price REAL,
+  is_active INTEGER DEFAULT 1,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS orders (
-  id VARCHAR(100) PRIMARY KEY,
-  email VARCHAR(255) NOT NULL,
+DROP TABLE IF EXISTS orders;
+CREATE TABLE orders (
+  id TEXT PRIMARY KEY,
+  email TEXT NOT NULL,
   product TEXT,
-  amount DECIMAL(10, 2),
-  status VARCHAR(50) DEFAULT 'processing',
-  date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  stripe_session_id VARCHAR(255)
+  amount REAL,
+  status TEXT DEFAULT 'processing',
+  date DATETIME DEFAULT CURRENT_TIMESTAMP,
+  stripe_session_id TEXT
 );
 
-CREATE TABLE IF NOT EXISTS settings (
-  key VARCHAR(100) PRIMARY KEY,
-  value JSONB,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+DROP TABLE IF EXISTS settings;
+CREATE TABLE settings (
+  key TEXT PRIMARY KEY,
+  value TEXT, -- JSON string
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS messages (
-  id VARCHAR(100) PRIMARY KEY,
-  name VARCHAR(255),
-  email VARCHAR(255),
-  subject VARCHAR(255),
+DROP TABLE IF EXISTS messages;
+CREATE TABLE messages (
+  id TEXT PRIMARY KEY,
+  name TEXT,
+  email TEXT,
+  subject TEXT,
   message TEXT,
-  status VARCHAR(50) DEFAULT 'unread',
-  date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  status TEXT DEFAULT 'unread',
+  date DATETIME DEFAULT CURRENT_TIMESTAMP
 );

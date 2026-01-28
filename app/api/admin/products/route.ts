@@ -22,12 +22,11 @@ export async function POST(request: Request) {
     const body = await request.json();
 
     if (body.id) {
-      // Update
       await query(
         `UPDATE products SET 
-         name = $1, description = $2, full_description = $3, image = $4, status = $5, 
-         tiers = $6, features = $7, price = $8, original_price = $9
-         WHERE id = $10`,
+         name = ?, description = ?, full_description = ?, image = ?, status = ?, 
+         tiers = ?, features = ?, price = ?, original_price = ?
+         WHERE id = ?`,
         [
           body.name, body.description, body.fullDescription, body.image, body.status,
           JSON.stringify(body.tiers), JSON.stringify(body.features), body.price, body.originalPrice,
@@ -35,11 +34,10 @@ export async function POST(request: Request) {
         ]
       );
     } else {
-      // Insert
       const id = `prod-${Date.now()}`;
       await query(
-        `INSERT INTO products (id, name, description, full_description, image, status, tiers, features, price, original_price)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+        `INSERT INTO products (id, name, description, full_description, image, status, tiers, features, price, original_price, created_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)`,
         [
           id, body.name, body.description, body.fullDescription, body.image, body.status || 'active',
           JSON.stringify(body.tiers), JSON.stringify(body.features), body.price || 0, body.originalPrice || 0
@@ -57,7 +55,7 @@ export async function POST(request: Request) {
 export async function DELETE(request: Request) {
   try {
     const { id } = await request.json();
-    await query('DELETE FROM products WHERE id = $1', [id]);
+    await query('DELETE FROM products WHERE id = ?', [id]);
     return Response.json({ success: true });
   } catch (error) {
     return Response.json({ error: 'Failed to delete' }, { status: 500 });

@@ -8,4 +8,8 @@ compatibility_flags = ["nodejs_compat"]
 # STRIPE_SECRET_KEY = "..."
 # DATABASE_URL = "..."
 
-# We are using Neon Postgres for all storage (Products, Orders, Settings, Messages)
+# We are using Cloudflare D1 for all storage (Products, Orders, Settings, Messages)
+[[d1_databases]]
+binding = "DB"
+database_name = "v0-autodesk-db"
+database_id = "REPLACEME_WITH_D1_ID"

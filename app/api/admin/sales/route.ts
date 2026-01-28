@@ -20,7 +20,7 @@ export async function GET() {
 export async function DELETE(request: Request) {
     try {
         const { id } = await request.json();
-        await query('DELETE FROM orders WHERE id = $1', [id]);
+        await query('DELETE FROM orders WHERE id = ?', [id]);
         return Response.json({ success: true });
     } catch (error) {
         return Response.json({ error: 'Failed to delete' }, { status: 500 });
