@@ -8,7 +8,4 @@ compatibility_flags = ["nodejs_compat"]
 # STRIPE_SECRET_KEY = "..."
 # DATABASE_URL = "..."
 
-[[kv_namespaces]]
-# We can use KV for simple settings if needed later
-binding = "SETTINGS"
-id = "settings_kv"
+# We are using Neon Postgres for all storage (Products, Orders, Settings, Messages)
