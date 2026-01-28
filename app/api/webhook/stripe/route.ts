@@ -1,10 +1,13 @@
 import Stripe from 'stripe';
 import { Pool } from '@neondatabase/serverless';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
+const stripe = process.env.STRIPE_SECRET_KEY
+  ? new Stripe(process.env.STRIPE_SECRET_KEY)
+  : null;
+
+const pool = process.env.DATABASE_URL
+  ? new Pool({ connectionString: process.env.DATABASE_URL })
+  : null;
 
 export async function POST(request: Request) {
   const sig = request.headers.get('stripe-signature');
@@ -12,11 +15,15 @@ export async function POST(request: Request) {
 
   let event;
 
+  if (!stripe || !pool) {
+    return Response.json({ error: 'System configuration error' }, { status: 500 });
+  }
+
   try {
     event = stripe.webhooks.constructEvent(
       body,
       sig!,
-      process.env.STRIPE_WEBHOOK_SECRET!
+      process.env.STRIPE_WEBHOOK_SECRET || ''
     );
   } catch (err: any) {
     console.error('Webhook signature verification failed:', err.message);
