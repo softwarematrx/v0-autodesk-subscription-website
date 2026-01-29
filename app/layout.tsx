@@ -8,6 +8,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 import FloatingContact from '@/components/floating-contact';
 import { ThemeProvider } from '@/components/theme-provider';
+import FacebookPixel from '@/components/fb-pixel';
 
 export const metadata: Metadata = {
   title: 'AutoCAD Store | Official Genuine Software Licenses',
@@ -34,6 +35,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AdminProvider>
+            <FacebookPixel />
             {children}
             <FloatingContact />
           </AdminProvider>

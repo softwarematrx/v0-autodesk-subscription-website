@@ -37,7 +37,7 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex flex-col pt-20 overflow-hidden">
+    <section className="relative flex flex-col pt-12 md:pt-14 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 z-0">
         <Image
@@ -56,7 +56,7 @@ export default function HeroSection() {
       </div>
 
       <div className="flex-1 flex items-center">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-12 md:py-20 w-full">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-6 md:py-8 w-full">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             {/* Left Content */}
             <div>
@@ -70,14 +70,13 @@ export default function HeroSection() {
                 <span className="text-sm text-muted-foreground font-semibold">Official Authorized Reseller</span>
               </div>
 
-              <h1 className="text-4xl md:text-5xl lg:text-7xl font-black mb-6 leading-tight text-foreground tracking-tighter uppercase italic">
+              <h1 className="text-xl md:text-2xl lg:text-4xl font-black mb-3 leading-tight text-foreground tracking-tighter uppercase italic">
                 AutoCAD 2026<br />
-                <span className="gradient-text not-italic">Premium Access</span>
+                <span className="gradient-text not-italic text-xl md:text-2xl lg:text-3xl">Premium Access</span>
               </h1>
 
-              <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-xl leading-relaxed font-medium">
-                The industry standard for 2D and 3D design. Experience the power of AutoCAD 2026 with
-                direct account activation and official support.
+              <p className="text-base md:text-lg text-muted-foreground mb-6 max-w-lg leading-relaxed font-medium">
+                The industry standard design tool. Official direct account activation.
               </p>
 
               {/* Features */}
@@ -99,7 +98,7 @@ export default function HeroSection() {
 
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <div className="flex flex-col gap-4 w-full sm:w-auto">
-                  <div className="relative group min-w-[300px]">
+                  <div className="relative group w-full">
                     <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
                     <input
                       type="email"
@@ -111,7 +110,7 @@ export default function HeroSection() {
                   </div>
                   <Button
                     size="lg"
-                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-black uppercase tracking-widest px-8 py-8 text-lg shadow-2xl shadow-primary/30 hover:scale-[1.02] transition-all rounded-2xl italic"
+                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-black uppercase tracking-widest px-8 py-3.5 md:py-4 text-xs shadow-xl shadow-primary/20 hover:scale-[1.02] transition-all rounded-xl italic"
                     onClick={async () => {
                       if (product) {
                         if (!email || !email.includes('@')) {
@@ -137,6 +136,16 @@ export default function HeroSection() {
                           });
                         } catch (e) { }
 
+                        // Track Facebook Event
+                        if (typeof window !== 'undefined' && window.fbq) {
+                          window.fbq('track', 'InitiateCheckout', {
+                            content_name: product.name,
+                            content_category: 'Software',
+                            value: tier?.price || 39.99,
+                            currency: 'USD'
+                          });
+                        }
+
                         if (tier?.checkoutUrl) {
                           const whopUrl = new URL(tier.checkoutUrl);
                           whopUrl.searchParams.append('email', email);
@@ -153,7 +162,7 @@ export default function HeroSection() {
                   </Button>
                 </div>
                 <Link href="/how-it-works" className="contents">
-                  <Button size="lg" variant="outline" className="w-full sm:w-auto border-2 border-primary/20 bg-background/50 backdrop-blur-md text-foreground hover:bg-accent hover:text-accent-foreground px-8 py-8 text-lg font-black uppercase tracking-widest transition-all rounded-2xl italic">
+                  <Button size="lg" variant="outline" className="w-full sm:w-auto border-2 border-primary/20 bg-background/50 backdrop-blur-md text-foreground hover:bg-accent hover:text-accent-foreground px-8 py-3.5 md:py-4 text-xs font-black uppercase tracking-widest transition-all rounded-xl italic">
                     Learn More
                   </Button>
                 </Link>
@@ -180,7 +189,7 @@ export default function HeroSection() {
                   <RotateCw className="w-8 h-8 text-primary animate-spin" />
                 </div>
               ) : (
-                <div className="relative bg-card/60 backdrop-blur-3xl border border-border rounded-[2.5rem] p-8 shadow-2xl animate-in fade-in duration-500 overflow-hidden group">
+                <div className="relative bg-card/60 backdrop-blur-3xl border border-border rounded-[1.5rem] p-5 shadow-2xl animate-in fade-in duration-500 overflow-hidden group">
                   <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
 
                   <div className="absolute -top-4 -right-4 bg-primary text-primary-foreground font-black px-6 py-3 rounded-full text-sm shadow-2xl shadow-primary/20 animate-pulse-glow uppercase tracking-widest italic z-20">
@@ -197,18 +206,18 @@ export default function HeroSection() {
                       />
                     </div>
 
-                    <h3 className="text-3xl font-black text-foreground mb-2 uppercase italic tracking-tighter hover:text-primary transition-colors">{product.name}</h3>
-                    <p className="text-muted-foreground mb-6 font-bold uppercase tracking-widest text-xs">{product.description}</p>
+                    <h3 className="text-2xl font-black text-foreground mb-2 uppercase italic tracking-tighter hover:text-primary transition-colors">{product.name}</h3>
+                    <p className="text-muted-foreground mb-4 font-bold uppercase tracking-widest text-[10px]">{product.description}</p>
                   </Link>
 
-                  <div className="flex items-baseline gap-4 mb-8">
-                    <span className="text-6xl font-black text-primary tracking-tighter italic">From ${product.tiers?.[0]?.price.toFixed(2)}</span>
-                    <span className="text-2xl text-muted-foreground/50 line-through font-black text-muted-foreground/50">${product.tiers?.[0]?.originalPrice.toFixed(2)}</span>
+                  <div className="flex items-baseline gap-4 mb-6">
+                    <span className="text-3xl font-black text-primary tracking-tighter italic">From ${product.tiers?.[0]?.price.toFixed(2)}</span>
+                    <span className="text-lg text-muted-foreground/50 line-through font-black text-muted-foreground/50">${product.tiers?.[0]?.originalPrice.toFixed(2)}</span>
                   </div>
 
                   <Link href={`/product/${product.id}`} className="block">
-                    <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-black py-10 text-xl shadow-2xl shadow-primary/20 hover:scale-[1.02] transition-all rounded-[1.25rem] uppercase tracking-[0.2em] italic">
-                      Configure Subscription
+                    <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-black py-4 text-base shadow-xl shadow-primary/20 hover:scale-[1.02] transition-all rounded-xl uppercase tracking-[0.2em] italic">
+                      Configure
                     </Button>
                   </Link>
                 </div>

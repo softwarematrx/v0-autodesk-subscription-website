@@ -81,6 +81,16 @@ export default function ProductDetailPage() {
         console.error('Failed to log order:', e);
       }
 
+      // Track Facebook Event
+      if (typeof window !== 'undefined' && window.fbq) {
+        window.fbq('track', 'InitiateCheckout', {
+          content_name: product.name,
+          content_category: 'Software',
+          value: selectedTier.price,
+          currency: 'USD'
+        });
+      }
+
       if (selectedTier.checkoutUrl) {
         const whopUrl = new URL(selectedTier.checkoutUrl);
         whopUrl.searchParams.append('email', email);
@@ -159,7 +169,7 @@ export default function ProductDetailPage() {
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
             {/* Left Column: Product Visuals */}
             <div className="space-y-8">
-              <div className="relative aspect-square bg-white border border-border rounded-[2.5rem] overflow-hidden group shadow-2xl">
+              <div className="relative aspect-square bg-white border border-border rounded-[2rem] overflow-hidden group shadow-2xl">
                 {/* Glow Background */}
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
 
@@ -210,7 +220,7 @@ export default function ProductDetailPage() {
                   </span>
                 </div>
 
-                <h1 className="text-4xl md:text-5xl lg:text-7xl font-black text-foreground mb-4 uppercase italic tracking-tighter leading-[0.9]">
+                <h1 className="text-3xl md:text-4xl font-black text-foreground mb-4 uppercase italic tracking-tighter leading-[0.9]">
                   {product.name}
                 </h1>
                 <div className="flex gap-3 mb-8">
@@ -230,7 +240,7 @@ export default function ProductDetailPage() {
               </div>
 
               {/* Price Table */}
-              <div className="bg-muted/30 border border-border rounded-[2.5rem] p-8 mb-10 shadow-inner overflow-hidden relative">
+              <div className="bg-muted/30 border border-border rounded-[2rem] p-6 mb-10 shadow-inner overflow-hidden relative">
                 <div className="absolute top-0 right-0 p-8 opacity-5">
                   <BadgeCheck className="w-32 h-32" />
                 </div>
@@ -260,7 +270,7 @@ export default function ProductDetailPage() {
                 </div>
 
                 <div className="flex items-baseline gap-4 mb-3 relative z-10">
-                  <span className="text-6xl md:text-7xl font-black text-primary tracking-tighter italic">
+                  <span className="text-4xl font-black text-primary tracking-tighter italic">
                     ${selectedTier?.price.toFixed(2)}
                   </span>
                   <span className="text-2xl text-muted-foreground line-through font-black italic">
@@ -291,7 +301,7 @@ export default function ProductDetailPage() {
 
                 <Button
                   onClick={handleBuyNow}
-                  className="w-full py-12 text-2xl font-black uppercase tracking-[0.2em] transition-all duration-500 shadow-2xl hover:scale-[1.02] active:scale-95 italic bg-primary hover:bg-primary/90 text-primary-foreground shadow-primary/20"
+                  className="w-full py-6 text-lg font-black uppercase tracking-[0.2em] transition-all duration-500 shadow-2xl hover:scale-[1.02] active:scale-95 italic bg-primary hover:bg-primary/90 text-primary-foreground shadow-primary/20"
                 >
                   BUY NOW
                 </Button>

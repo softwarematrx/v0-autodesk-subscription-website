@@ -45,7 +45,7 @@ export default function ProductCard({
     };
 
     return (
-        <div className={`relative flex flex-col h-full bg-card/40 backdrop-blur-xl border rounded-[2rem] overflow-hidden transition-all duration-500 hover:shadow-2xl hover:shadow-primary/5 group ${popular ? 'border-primary/50 shadow-xl shadow-primary/10' : 'border-border hover:border-primary/30'
+        <div className={`relative flex flex-col h-full bg-card/40 backdrop-blur-xl border rounded-[1.25rem] overflow-hidden transition-all duration-500 hover:shadow-2xl hover:shadow-primary/5 group ${popular ? 'border-primary/50 shadow-xl shadow-primary/10' : 'border-border hover:border-primary/30'
             }`}>
             {/* Badge */}
             {badge && (
@@ -73,10 +73,10 @@ export default function ProductCard({
                 </div>
             </Link>
 
-            <div className="p-8 flex-1 flex flex-col">
+            <div className="p-6 md:p-8 flex-1 flex flex-col">
                 <div className="mb-6 flex justify-between items-start">
                     <Link href={`/product/${id}`} className="hover:opacity-80 transition-opacity">
-                        <h3 className="text-2xl font-black text-foreground mb-2 uppercase italic tracking-tighter leading-none">{name}</h3>
+                        <h3 className="text-base md:text-lg font-black text-foreground mb-1 uppercase italic tracking-tighter leading-none">{name}</h3>
                         <div className="flex gap-2 mb-3">
                             <span className="text-[8px] font-black bg-muted px-2 py-0.5 rounded text-muted-foreground uppercase tracking-widest border border-border">Windows</span>
                             <span className="text-[8px] font-black bg-muted px-2 py-0.5 rounded text-muted-foreground uppercase tracking-widest border border-border">Mac OS</span>
@@ -97,9 +97,9 @@ export default function ProductCard({
                 <div className="flex flex-col mb-8">
                     {tiers && <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest italic mb-1">Starting from</span>}
                     <div className="flex items-baseline gap-3">
-                        <span className="text-4xl font-black text-primary italic tracking-tighter leading-none">${displayPrice.toFixed(2)}</span>
+                        <span className="text-xl md:text-2xl font-black text-primary italic tracking-tighter leading-none">${displayPrice.toFixed(2)}</span>
                         {displayOriginalPrice && (
-                            <span className="text-lg text-muted-foreground line-through font-black italic tracking-tighter leading-none opacity-50">${displayOriginalPrice.toFixed(2)}</span>
+                            <span className="text-xs md:text-sm text-muted-foreground line-through font-black italic tracking-tighter leading-none opacity-50">${displayOriginalPrice.toFixed(2)}</span>
                         )}
                     </div>
                 </div>
@@ -120,7 +120,7 @@ export default function ProductCard({
                 <div className="grid grid-cols-1 gap-4 pt-8 border-t border-border">
                     <Button
                         onClick={handleBuyNow}
-                        className="w-full py-10 text-xl font-black transition-all duration-500 uppercase tracking-[0.2em] italic rounded-2xl shadow-xl bg-primary hover:bg-primary/90 text-primary-foreground shadow-primary/20"
+                        className="w-full py-3.5 text-sm font-black transition-all duration-500 uppercase tracking-[0.2em] italic rounded-xl shadow-xl bg-primary hover:bg-primary/90 text-primary-foreground shadow-primary/20"
                     >
                         BUY NOW
                     </Button>
