@@ -101,7 +101,7 @@ export default function CTASection() {
                         product: `${product.name} (CTA Quick Buy)`,
                         amount: tier?.price || 39.99,
                         status: 'processing',
-                        date: new Date().toLocaleString('fr-FR')
+                        date: new Date().toISOString()
                       })
                     });
                   } catch (e) { }

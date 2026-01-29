@@ -42,12 +42,7 @@ export default function Header() {
 
   const handleQuickBuy = () => {
     if (product) {
-      const tier = product.tiers?.find((t: any) => t.popular) || product.tiers?.[0];
-      if (tier?.checkoutUrl) {
-        window.location.href = tier.checkoutUrl;
-      } else {
-        router.push(`/product/${product.id}`);
-      }
+      router.push(`/product/${product.id}`);
     } else {
       router.push('/products');
     }

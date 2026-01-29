@@ -74,7 +74,7 @@ export default function ProductDetailPage() {
             product: `${product.name} (${selectedTier.duration})`,
             amount: selectedTier.price,
             status: 'processing',
-            date: new Date().toLocaleString('fr-FR')
+            date: new Date().toISOString()
           })
         });
       } catch (e) {

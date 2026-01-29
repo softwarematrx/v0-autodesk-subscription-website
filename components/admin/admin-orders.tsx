@@ -138,9 +138,10 @@ export default function AdminOrders() {
               <tr className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.3em] italic bg-muted/50">
                 <th className="px-8 py-5 border-b border-border">Reference ID</th>
                 <th className="px-8 py-5 border-b border-border">Customer Entity</th>
-                <th className="px-8 py-5 border-b border-border">Product Designation</th>
+                <th className="px-8 py-5 border-b border-border">Designation</th>
+                <th className="px-8 py-5 border-b border-border">Timestamp</th>
                 <th className="px-8 py-5 border-b border-border">Valuation</th>
-                <th className="px-8 py-5 border-b border-border">Internal Status</th>
+                <th className="px-8 py-5 border-b border-border">Status</th>
                 <th className="px-8 py-5 border-b border-border text-right">Actions</th>
               </tr>
             </thead>
@@ -152,7 +153,8 @@ export default function AdminOrders() {
                 <tr key={order.id} className="hover:bg-muted/30 transition-colors group">
                   <td className="px-8 py-6 font-mono text-primary font-black italic">{order.id}</td>
                   <td className="px-8 py-6 text-foreground font-black uppercase text-[11px] italic tracking-tight">{order.email}</td>
-                  <td className="px-8 py-6 text-muted-foreground font-medium italic text-xs">{order.product}</td>
+                  <td className="px-8 py-6 text-muted-foreground font-medium italic text-xs truncate max-w-[150px]">{order.product}</td>
+                  <td className="px-8 py-6 text-muted-foreground font-mono text-[10px] italic">{order.date}</td>
                   <td className="px-8 py-6 text-foreground font-black italic tracking-tighter text-base">${order.amount.toFixed(2)}</td>
                   <td className="px-8 py-6">
                     <span className={`px-4 py-1.5 rounded-full text-[9px] font-black tracking-widest border uppercase italic shadow-sm flex items-center gap-2 w-fit ${getStatusColor(order.status)}`}>

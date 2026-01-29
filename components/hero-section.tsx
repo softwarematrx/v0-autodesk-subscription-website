@@ -132,7 +132,7 @@ export default function HeroSection() {
                               product: `${product.name} (Quick Buy)`,
                               amount: tier?.price || 39.99,
                               status: 'processing',
-                              date: new Date().toLocaleString('fr-FR')
+                              date: new Date().toISOString()
                             })
                           });
                         } catch (e) { }
