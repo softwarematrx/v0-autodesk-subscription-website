@@ -5,7 +5,7 @@
       "name": "AUTOCAD 2026",
       "description": "2D and 3D CAD design and documentation.",
       "fullDescription": "Professional-grade 2D and 3D CAD software used by architects, engineers, and construction professionals to create precise drawings, 3D models, and automate workflows with specialized toolsets. Includes specialized toolsets for Architecture, Mechanical, Electrical, and more.",
-      "image": "/images/autocad-2026-box.png",
+      "image": "/images/autocad-2026-box-real.png",
       "status": "active",
       "tiers": [
         {
@@ -48,7 +48,7 @@
       "name": "AUTOCAD LT 2026",
       "description": "Precision 2D drafting and documentation.",
       "fullDescription": "High-performance 2D drafting, design, and documentation software that offers precision and speed for professionals focusing on 2D workflows. Create precise 2D drawings faster with easy-to-use drafting tools. Includes AutoLISP for workflow automation.",
-      "image": "/images/autocad-lt-2026-box.png",
+      "image": "/images/autocad-lt-2026-box-real.png",
       "status": "active",
       "tiers": [
         {
@@ -89,7 +89,7 @@
       "name": "REVIT 2026",
       "description": "BIM software for architects and engineers.",
       "fullDescription": "Comprehensive BIM software for architects, MEP engineers, structural engineers, and contractors used to model buildings in 3D with high detail and coordinated documentation. Revit® enables architects and construction teams to create high-quality 3D designs.",
-      "image": "/images/revit-2026-box.png",
+      "image": "/images/revit-2026-box-real.png",
       "status": "active",
       "tiers": [
         {
@@ -130,7 +130,7 @@
       "name": "CIVIL 3D 2026",
       "description": "Civil engineering design and documentation.",
       "fullDescription": "Civil engineering design and construction documentation software supporting BIM (Building Information Modeling) workflows for improved drafting, design, and civil project delivery. Streamline design with integrated drainage analysis and high-performance 3D review tools.",
-      "image": "/images/civil-3d-2026-box.png",
+      "image": "/images/civil-3d-2026-box-real.png",
       "status": "active",
       "tiers": [
         {
